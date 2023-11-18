@@ -15,6 +15,9 @@ const TopNavigation = () => {
         <Link href="/about" passHref>
           <Button color="inherit" variant='outlined'>About</Button>
         </Link>
+        <Link href="/list" passHref>
+          <Button color="inherit" variant='outlined'>List of Incidents</Button>
+        </Link>
       </Toolbar>
     </AppBar>
   );
