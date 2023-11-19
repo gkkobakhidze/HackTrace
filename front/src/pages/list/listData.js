@@ -41,18 +41,7 @@ const incidents = [
 
 const ListData = () => {
     return (
-      <Stack
-        direction="column"
-        justifyContent="top"
-        alignItems="center"
-        spacing={2}
-        sx={{ minHeight: '100vh' }}
-      >
-        <Typography variant="h3">List of Incidents</Typography>
-        <Typography component="div">
-          Below you may find the list of identified hackers and latest incidents!
-        </Typography>
-        <IncidentsTable incidents={incidents} />
+        <Stack>
         <DisplayData></DisplayData>
       </Stack>
     );

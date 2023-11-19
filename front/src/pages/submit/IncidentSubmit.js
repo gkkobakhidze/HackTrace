@@ -8,6 +8,7 @@ import React from 'react';
 import PocketBase from 'pocketbase'; // Import PocketBase
 
 import { useState } from 'react';
+import { match } from 'assert';
 
 export class IncidentSubmit extends React.Component {
   constructor(props) {
@@ -23,6 +24,28 @@ export class IncidentSubmit extends React.Component {
 
   }
   
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData = async () => {
+    try {
+        const response = await axios.get('http://localhost:8090/api/collections/hacker/records', {
+            params: {
+                limit: 40 // Assuming the API supports a limit parameter
+            }
+        });
+        if (response.data) {
+          this.setState({
+            hackers:response.data.items,
+          })
+        } else {
+            console.error("Invalid response format");
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+};
   
   handleSubmit = async (event) => {
 
@@ -36,23 +59,54 @@ export class IncidentSubmit extends React.Component {
     axios.get(apiUrl)
         .then( response  => {
             // Output the response data to the console
-            console.log(response.data);
             const pb = new PocketBase('http://127.0.0.1:8090');
-
             const { method_of_hack, related_domain } = this.state;
+
+            const sendr = response.data.inputs[0].addresses[0]
+            const recip = response.data.outputs[0].addresses[0]
+            let matchingHacker = this.state.hackers.find(hacker => {
+              let normalizedKnownAddress = hacker.known_addresses.trim().toLowerCase();
+              let normalizedRecipient = (recip.startsWith('0x') ? recip : '0x' + recip).toLowerCase();
+              return normalizedKnownAddress === normalizedRecipient;
+            });
+            
+            if (matchingHacker) {
+              try {
+                this.client.collection('hacker').update(matchingHacker.id, {
+                  "incident_count": matchingHacker.incident_count+1,
+                  "hack_methods": `${matchingHacker.hack_methods} ${this.state.method_of_hack}`,
+                  "related_domains": `${matchingHacker.related_domains} ${this.state.related_domain}`
+                });
+                const record = this.client.collection('incidents').create({
+                  tx: this.state.tx,
+                  method_of_hack: method_of_hack,
+                  related_domain: related_domain,
+                  sender:`0x${sendr}`,
+                  recipient:`0x${recip}`,
+                  related_hacker:matchingHacker.id,
+                });
+  
+              } catch (error) {
+                console.error('Error submitting incident:', error);
+              }
+              
+            }
+            else {
 
             try {
               const record = this.client.collection('incidents').create({
                 tx: this.state.tx,
                 method_of_hack: method_of_hack,
                 related_domain: related_domain,
-                sender:`0x${response.data.addresses[0]}`,
-                recipient:`0x${response.data.addresses[1]}`,
+                sender:`0x${sendr}`,
+                recipient:`0x${recip}`,
               });
 
               console.log('Record created:', record);
             } catch (error) {
               console.error('Error submitting incident:', error);
+            }
+
             }
         })
         .catch(error => {

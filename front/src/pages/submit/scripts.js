@@ -12,7 +12,6 @@ export function cleanData(tx){
     axios.get(apiUrl)
         .then(response => {
             // Output the response data to the console
-            console.log(response.data);
         })
         .catch(error => {
             // Handle any errors here

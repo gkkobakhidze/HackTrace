@@ -19,7 +19,7 @@ const IncidentsTable = ({ incidents }) => {
             <TableCell align="right">Transaction</TableCell>
             <TableCell align="right">Sender</TableCell>
             <TableCell align="right">Recipient</TableCell>
-            <TableCell align="right">Identified Hacker ID</TableCell>
+            <TableCell align="right">Related Hacker</TableCell>
             <TableCell align="right">Hack Methods</TableCell>
             <TableCell align="right">Related Domains</TableCell>
           </TableRow>
@@ -41,7 +41,7 @@ const IncidentsTable = ({ incidents }) => {
                 </TableCell>
               <TableCell align="right">{truncateString(incident.sender, 8)}</TableCell>
               <TableCell align="right">{truncateString(incident.recipient, 8)}</TableCell>
-              <TableCell align="right">{incident.identified_hacker_id}</TableCell>
+              <TableCell align="right">{incident.related_hacker}</TableCell>
               <TableCell align="right">{incident.method_of_hack}</TableCell>
               <TableCell align="right">{incident.related_domain}</TableCell>
               
