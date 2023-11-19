@@ -1,0 +1,1 @@
+This is a hackathon project that attempts to create a data repository for users to submit information about their hacks, aggregate it, process it, group it, and provide it for on-chain detectives for futher investigation, thereby removing the burden of interviewing the users individually.
