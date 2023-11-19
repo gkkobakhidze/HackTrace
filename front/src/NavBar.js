@@ -30,6 +30,11 @@ const theme = createTheme({
                         Submit Info
                     </Typography>
                 </Grid>
+                <Grid component={RouterLink} to="/list" item xs={4}>
+                    <Typography  align='center' variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        Incidents & Hackers
+                    </Typography>
+                </Grid>
                 <Grid component={RouterLink} to="/about" item xs={4}>
                     <Typography  align='center' variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         About

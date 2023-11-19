@@ -1,6 +1,5 @@
 // src/components/IncidentsTable.js
 import React from 'react';
-import Link from 'next/link';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 const truncateString = (str, num) => {
@@ -12,7 +11,7 @@ const truncateString = (str, num) => {
 
 const IncidentsTable = ({ incidents }) => {
   return (
-    <TableContainer component={Paper} sx={{ maxWidth: '75%', margin: 'auto' }}>
+    <TableContainer component={Paper} sx={{ maxWidth: '95%', margin: 'auto' }}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -21,7 +20,7 @@ const IncidentsTable = ({ incidents }) => {
             <TableCell align="right">Sender</TableCell>
             <TableCell align="right">Recipient</TableCell>
             <TableCell align="right">Identified Hacker ID</TableCell>
-            <TableCell align="right">Methods of Hack</TableCell>
+            <TableCell align="right">Hack Methods</TableCell>
             <TableCell align="right">Related Domains</TableCell>
           </TableRow>
         </TableHead>
@@ -36,15 +35,15 @@ const IncidentsTable = ({ incidents }) => {
               </TableCell>
                 <TableCell align="right">
                     
-                <Link target="_blank" href={`https://etherscan.io/tx/${incident.tx}`}>
+                <a target="_blank" href={`https://etherscan.io/tx/${incident.tx}`}>
                     {truncateString(incident.tx, 8)}
-                </Link>
+                </a>
                 </TableCell>
               <TableCell align="right">{truncateString(incident.sender, 8)}</TableCell>
               <TableCell align="right">{truncateString(incident.recipient, 8)}</TableCell>
               <TableCell align="right">{incident.identified_hacker_id}</TableCell>
-              <TableCell align="right">{incident.methods_of_hack}</TableCell>
-              <TableCell align="right">{incident.related_domains}</TableCell>
+              <TableCell align="right">{incident.method_of_hack}</TableCell>
+              <TableCell align="right">{incident.related_domain}</TableCell>
               
             </TableRow>
           ))}

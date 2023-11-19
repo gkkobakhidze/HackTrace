@@ -2,7 +2,9 @@
 
 import React from 'react';
 import axios from 'axios';
-import { Box, Typography, Paper } from '@mui/material';
+import { Box, Typography,Stack, Paper } from '@mui/material';
+import PocketBase from 'pocketbase'; // Import PocketBase
+import IncidentsTable from './IncidentsTable';
 
 class DisplayData extends React.Component {
   constructor(props) {
@@ -12,6 +14,8 @@ class DisplayData extends React.Component {
       isLoading: true,
       error: null
     };
+    this.client = new PocketBase('http://localhost:8090');
+
   }
 
   componentDidMount() {
@@ -20,13 +24,23 @@ class DisplayData extends React.Component {
 
   fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8090/api/collections/your_collection_name/records');
-      this.setState({ records: response.data.items, isLoading: false });
+        const response = await axios.get('http://localhost:8090/api/collections/incidents/records', {
+            params: {
+                limit: 40 // Assuming the API supports a limit parameter
+            }
+        });
+        if (response.data) {
+          this.setState({
+            records:response.data.items,
+            isLoading:false,
+          })
+        } else {
+            console.error("Invalid response format");
+        }
     } catch (error) {
-      this.setState({ error, isLoading: false });
-      console.error('Error fetching data:', error);
+        console.error('Error fetching data:', error);
     }
-  };
+};
 
   render() {
     const { records, isLoading, error } = this.state;
@@ -41,11 +55,24 @@ class DisplayData extends React.Component {
 
     return (
       <Box sx={{ p: 2 }}>
+        <Stack
+          direction="column"
+          justifyContent="top"
+          alignItems="center"
+          spacing={2}
+          sx={{ minHeight: '100vh' }}
+        >
+          <Typography variant="h3">List of Incidents</Typography>
+          <Typography component="div">
+            Below you may find the list of identified hackers and latest incidents!
+          </Typography>
+          <IncidentsTable incidents={this.state.records} />
+        </Stack>
         {records.map(record => (
           <Paper key={record.id} sx={{ p: 2, mb: 2 }}>
-            <Typography variant="h6">Name: {record.name}</Typography>
-            <Typography>Email: {record.email}</Typography>
-            <Typography>Message: {record.message}</Typography>
+            <Typography variant="h6">Name: {record.tx}</Typography>
+            <Typography>Email: {record.method_of_hack}</Typography>
+            <Typography>Message: {record.related_domain}</Typography>
           </Paper>
         ))}
       </Box>

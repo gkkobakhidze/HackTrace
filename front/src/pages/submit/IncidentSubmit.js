@@ -23,19 +23,35 @@ export class IncidentSubmit extends React.Component {
 
   }
   
-  handleSubmit = async (event) => {
-    console.log("ah")
-  };
   
+  handleSubmit = async (event) => {
+    event.preventDefault(); // Prevent default form submission behavior
+    const pb = new PocketBase('http://127.0.0.1:8090');
+
+    const { tx, method_of_hack, related_domain } = this.state;
+
+    try {
+
+      const record = await this.client.collection('incidents').create({
+        tx: tx,
+        method_of_hack: method_of_hack,
+        related_domain: related_domain
+      });
+
+      console.log('Record created:', record);
+    } catch (error) {
+      console.error('Error submitting incident:', error);
+    }
+  };
 
   handleChange = (e) => {
-    let { value, name } = e.target;
+    const name = e.target.name
+    const value = e.target.value
     
-    const prevItem = this.state.active_item;
-    const activeItem = { ...prevItem, [name]: value };
-
-    this.setState({
-      active_item: activeItem,
+    this.setState(prev_state=> {
+        const new_state = {...prev_state};
+        new_state[name] = value;
+        return new_state;
     });
   };
 
@@ -48,7 +64,7 @@ export class IncidentSubmit extends React.Component {
       spacing={2}
       sx={{ minHeight: '100vh' }}
     >
-    <Typography variant='h3'>
+    <Typography variant='h4'>
       Got Hacked? Submit your incident info:
     </Typography>
       <Box component="form" onSubmit={this.handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -64,12 +80,6 @@ export class IncidentSubmit extends React.Component {
         autoFocus
         value={this.state.tx}
         onChange={this.handleChange}
-        InputProps={{
-          style: { color: 'white' } // Changes the text color
-        }}
-        InputLabelProps={{
-          style: { color: 'white' } // Changes the label color
-        }}
       />
       <Typography>
         Hack Contact Method
@@ -78,16 +88,10 @@ export class IncidentSubmit extends React.Component {
         margin="normal"
         required
         fullWidth
-        id="methods_of_hack"
-        name="methods_of_hack"
-        value={this.state.methods_of_hack}
+        id="method_of_hack"
+        name="method_of_hack"
+        value={this.state.method_of_hack}
         onChange={this.handleChange}
-        InputProps={{
-          style: { color: 'white' } // Changes the text color
-        }}
-        InputLabelProps={{
-          style: { color: 'white' } // Changes the label color
-        }}
       />
       <Typography>
         Domain or site of hack
@@ -101,12 +105,6 @@ export class IncidentSubmit extends React.Component {
         autoComplete="related_domain"
         value={this.state.related_domain}
         onChange={this.handleChange}
-        InputProps={{
-          style: { color: 'white' } // Changes the text color
-        }}
-        InputLabelProps={{
-          style: { color: 'white' } // Changes the label color
-        }}
       />
       <Button
         type="submit"

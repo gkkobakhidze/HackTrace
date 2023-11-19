@@ -1,11 +1,12 @@
 // src/pages/about.js
 'use client'
-import Link from 'next/link';
 
 // Example usage in a page
 import React from 'react';
-import IncidentsTable from '../IncidentsTable';
+import IncidentsTable from '../../IncidentsTable';
 
+import { Stack, Button, Typography } from '@mui/material';
+import DisplayData from '../../DisplayData';
 const incidents = [
     {
         id:"1",
@@ -36,11 +37,9 @@ const incidents = [
     },
   // ... other incidents
 ];
-import { Stack, Button, Typography } from '@mui/material';
-import DisplayData from '../DisplayData';
 
 
-const List = () => {
+const ListData = () => {
     return (
       <Stack
         direction="column"
@@ -59,5 +58,5 @@ const List = () => {
     );
   };
   
-  export default List;
+  export default ListData;
   
