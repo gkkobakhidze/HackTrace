@@ -1,4 +1,5 @@
 // src/pages/about.js
+'use client'
 import Link from 'next/link';
 
 // Example usage in a page
@@ -36,6 +37,7 @@ const incidents = [
   // ... other incidents
 ];
 import { Stack, Button, Typography } from '@mui/material';
+import DisplayData from '../DisplayData';
 
 
 const List = () => {
@@ -52,6 +54,7 @@ const List = () => {
           Below you may find the list of identified hackers and latest incidents!
         </Typography>
         <IncidentsTable incidents={incidents} />
+        <DisplayData></DisplayData>
       </Stack>
     );
   };

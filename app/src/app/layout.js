@@ -1,6 +1,6 @@
 // src/components/RootLayout.js
 import { Inter } from 'next/font/google';
-import TopNavigation from './TopNavigation';
+import TopNavigation from '../../../front/src/TopNavigation';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
